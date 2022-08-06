@@ -6,10 +6,18 @@ import './index.css'
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faUser, faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import
+{ faUser,
+  faPowerOff,
+  faSackDollar,
+  faHouse,
+  faFaceMeh,
+  faFaceDizzy,
+  faFaceSmile,
+  faArrowTurnDown} from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
-library.add(faUser, faPowerOff)
+library.add(faUser, faPowerOff, faSackDollar, faHouse, faFaceMeh, faFaceDizzy, faFaceSmile, faArrowTurnDown)
 
 /* add font awesome icon component */
 Vue.component('font-awesome-icon', FontAwesomeIcon)

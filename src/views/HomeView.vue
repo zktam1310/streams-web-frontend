@@ -5,6 +5,7 @@
         <overview-card-component />
       </div>
       <div class="home-row-child w-2/3">
+        <div class="home-row-child-title">Clients</div>
         <client-overview-card-component />
       </div>
       <div class="home-row-child">
@@ -48,5 +49,8 @@ export default Vue.extend({
 }
 .home-row-child {
   @apply px-5 mb-8;
+}
+.home-row-child-title {
+  @apply w-full text-left font-semibold text-xl mb-2;
 }
 </style>
