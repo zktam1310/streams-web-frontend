@@ -14,10 +14,11 @@ import
   faFaceMeh,
   faFaceDizzy,
   faFaceSmile,
-  faArrowTurnDown} from '@fortawesome/free-solid-svg-icons'
+  faArrowTurnDown,
+  faCalendar} from '@fortawesome/free-solid-svg-icons'
 
 /* add icons to the library */
-library.add(faUser, faPowerOff, faSackDollar, faHouse, faFaceMeh, faFaceDizzy, faFaceSmile, faArrowTurnDown)
+library.add(faUser, faPowerOff, faSackDollar, faHouse, faFaceMeh, faFaceDizzy, faFaceSmile, faArrowTurnDown, faCalendar)
 
 /* add font awesome icon component */
 Vue.component('font-awesome-icon', FontAwesomeIcon)

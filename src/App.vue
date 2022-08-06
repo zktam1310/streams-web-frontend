@@ -40,6 +40,6 @@ export default Vue.extend({
   color: #2c3e50;
 }
 .view_wrapper {
-  @apply p-5 mt-8;
+  @apply p-2 md:p-5 mt-8;
 }
 </style>

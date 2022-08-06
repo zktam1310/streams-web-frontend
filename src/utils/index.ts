@@ -14,3 +14,17 @@ export class NumberFormatter {
         return output.reverse().join("");
     }
 }
+
+export class DateFormatter {
+
+    humanDate(timestamp:number) {
+        return new Date(timestamp * 1000).toDateString();
+    }
+
+    distanceDay(timestamp:number) {
+        let difference = Date.now() - (timestamp * 1000);
+        if (difference <= 0) return "Now";
+        if (difference < 86400) return Math.floor(difference / 3600) + " minute ago";
+        return Math.floor(difference / 86400) + " day ago";
+    }
+}

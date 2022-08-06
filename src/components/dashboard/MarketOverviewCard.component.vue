@@ -61,7 +61,7 @@ interface clientObject {
 }
 
 export default Vue.extend({
-  name: 'ClientOverviewCard',
+  name: 'MarketOverviewCard',
   data() {
     return {
       clientData: [] as Array<clientObject>,
@@ -110,11 +110,11 @@ export default Vue.extend({
 
 <style scoped>
 .card-wrapper {
-  @apply py-3 px-0 md:py-8 md:px-6 rounded-lg;
+  @apply py-8 px-6 rounded-lg;
   box-shadow: 0px 0.10rem 0.5rem rgb(0 0 0 / 0.10);
 }
 .client-wrapper {
-  @apply w-1/2 lg:w-1/3 px-5 my-2 text-left cursor-pointer;
+  @apply w-1/3 px-5 my-2 text-left cursor-pointer;
 }
 .client_wrapper_hover_icon {
   @apply opacity-10 text-center;
