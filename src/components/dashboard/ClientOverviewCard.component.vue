@@ -78,25 +78,25 @@ export default Vue.extend({
           budget: 900000,
           type: "Condo",
           status: "neutral",
-          updated_at: 1659783438
+          updated_at: 1659850538
       },
         {
           id: "2",
           name: "Mike",
           title: "Mr.",
           budget: 1200000,
-          type: "Landed",
+          type: "Terrace",
           status: "positive",
-          updated_at: 1659781438
+          updated_at: 1659850138
         },
         {
           id: "3",
           name: "Jack",
           title: "Mr.",
           budget: 800000,
-          type: "Landed",
+          type: "Terrace",
           status: "negative",
-          updated_at: 1659682438
+          updated_at: 1659849138
         },
     ]
   },

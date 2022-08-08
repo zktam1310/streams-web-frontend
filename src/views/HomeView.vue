@@ -8,10 +8,10 @@
         <div class="home-row-child-title">Clients</div>
         <client-overview-card-component />
       </div>
-      <!-- <div class="home-row-child w-full lg:w-2/3">
+      <div class="home-row-child w-full lg:w-2/3">
         <div class="home-row-child-title">Market</div>
         <market-overview-card-component />
-      </div> -->
+      </div>
     </div>
   </div>
 </template>

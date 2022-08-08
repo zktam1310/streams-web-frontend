@@ -1,47 +1,12 @@
 <template>
   <div class="card-wrapper">
-    <div class="flex flex-wrap">
-        <div
-          v-for="(v,k) in clientData"
-          :key="k"
-          @click="goClientDetails(v['id'])"
-          class="client-wrapper">
-            <div>
-              {{ v['title'] + " " + v['name'] }}
-              <span
-                v-if="v['status'] == 'positive'"
-                class="ml-3 text-green-300">
-                <font-awesome-icon icon="fa fa-face-smile" />
-              </span>
-              <span
-                v-else-if="v['status'] == 'negative'"
-                class="ml-3 text-red-500">
-                <font-awesome-icon icon="fa fa-face-dizzy" />
-              </span>
-              <span
-                v-else
-                class="ml-3 text-gray-400">
-                <font-awesome-icon icon="fa fa-face-meh" />
-              </span>
-            </div>
-            <div>
-              <font-awesome-icon icon="fa fa-sack-dollar" />
-              <span class="ml-2">{{ NumberFormatter.thousandSeparator(v['budget']) }}</span>
-            </div>
-            <div>
-              <font-awesome-icon icon="fa fa-house" />
-              <span class="ml-2">{{ v['type'] }}</span>
-            </div>
-            <div>
-              <font-awesome-icon icon="fa fa-calendar" />
-              <span class="ml-2">{{ DateFormatter.distanceDay(v['updated_at']) }}</span>
-            </div>
-            <div class="client_wrapper_hover_icon">
-              <span class="rotate-90 inline-block">
-                <font-awesome-icon icon="fa fa-arrow-turn-down" />
-              </span>
-            </div>
-        </div>
+    <div class="flex flex-wrap justify-center">
+      <div class="my-2 md:my-0">
+        <doughnut-chart-component :chartData="chartData" />
+      </div>
+      <div class="my-2 md:my-0">
+        <doughnut-chart-component :chartData="chartData2" />
+      </div>
     </div>
   </div>
 </template>
@@ -49,56 +14,48 @@
 <script lang="ts">
 import Vue from 'vue';
 import { NumberFormatter, DateFormatter } from '@/utils/index';
+import DoughnutChartComponent from '../charts/DoughnutChart.component.vue';
 
-interface clientObject {
-  id: string,
-  name: string,
-  title: string,
-  budget: number,
-  type: string,
-  status: string,
-  updated_at: number
+interface IChartData {
+  labels: Array<String>,
+  datasets: Array<Object>
 }
 
 export default Vue.extend({
   name: 'MarketOverviewCard',
+  components: {
+    DoughnutChartComponent
+  },
   data() {
     return {
-      clientData: [] as Array<clientObject>,
-      NumberFormatter: new NumberFormatter(),
-      DateFormatter: new DateFormatter(),
+      chartData: {} as IChartData,
+      chartData2: {} as IChartData,
     }
   },
   mounted() {
-    this.clientData = [
-        {
-          id: "1",
-          name: "Cherry",
-          title: "Ms.",
-          budget: 900000,
-          type: "Condo",
-          status: "neutral",
-          updated_at: 1659783438
-      },
-        {
-          id: "2",
-          name: "Mike",
-          title: "Mr.",
-          budget: 1200000,
-          type: "Landed",
-          status: "positive",
-          updated_at: 1659781438
-        },
-        {
-          id: "3",
-          name: "Jack",
-          title: "Mr.",
-          budget: 800000,
-          type: "Landed",
-          status: "negative",
-          updated_at: 1659682438
-        },
-    ]
+    this.chartData = {
+      labels: ['Residential', 'Commercial', 'Industrial'],
+      datasets: [{ 
+        data: [40, 20, 12], 
+        backgroundColor: [
+          'rgb(255, 0, 0)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)'
+        ],  
+      }]
+    };
+    this.chartData2 = {
+      labels: ['Ampang', 'Klang', 'Bukit Jalil', 'Sentul'],
+      datasets: [{ 
+        data: [35, 12, 10, 8], 
+        backgroundColor: [
+          'rgb(255, 0, 0)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)',
+          'rgb(255, 99, 132)',
+        ],  
+      }]
+    };
   },
   methods: {
     goClientDetails(id:string) {

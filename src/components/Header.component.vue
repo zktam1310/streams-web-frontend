@@ -41,7 +41,7 @@ export default Vue.extend({
 
 <style scoped>
 .header {
-  @apply mt-5 flex flex-wrap justify-center items-center p-5;
+  @apply mt-1 flex flex-wrap justify-center items-center p-5;
 }
 
 nav {
