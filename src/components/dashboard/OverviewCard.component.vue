@@ -1,9 +1,9 @@
 <template>
   <div class="card-wrapper">
     <div class="flex flex-wrap">
-        <h1 class='text-2xl font-semibold'>
-            Welcome back, {{ username }}
-        </h1>
+      <h1 class='text-2xl font-semibold'>
+          Welcome back, {{ username }}
+      </h1>
     </div>
   </div>
 </template>

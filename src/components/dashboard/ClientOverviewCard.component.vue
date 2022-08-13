@@ -30,16 +30,18 @@
             </div>
             <div class="w-2/5">
               <vue-circle
-                :progress="v['progress']"
+                :progress="getStatusProgress(v['progress'])"
                 :size="100"
                 :reverse="false"
                 line-cap="round"
                 :fill="getStatusColor(v['status'])"
                 empty-fill="rgba(0, 0, 0, .1)"
-                :animation-start-value="0.0"
-                :start-angle="0"
                 insert-mode="append"
-                :thickness="5"/>
+                :thickness="8"
+                :show-percent="false"
+                >
+                <div class="text-xs font-mono"> {{ v['progress'] }} </div>
+              </vue-circle>
             </div>
         </div>
     </div>
@@ -57,7 +59,7 @@ interface clientObject {
   title: string,
   budget: number,
   type: string,
-  progress: number,
+  progress: string,
   status: string,
   updated_at: number
 }
@@ -82,7 +84,7 @@ export default Vue.extend({
           title: "Ms.",
           budget: 900000,
           type: "Condo",
-          progress: 70,
+          progress: 'Appointment',
           status: "neutral",
           updated_at: 1660368715
       },
@@ -92,9 +94,9 @@ export default Vue.extend({
           title: "Mr.",
           budget: 1200000,
           type: "Terrace",
-          progress: 30,
+          progress: 'Booking',
           status: "positive",
-          updated_at: 1660368415
+          updated_at: 1660290415
         },
         {
           id: "3",
@@ -102,30 +104,38 @@ export default Vue.extend({
           title: "Mr.",
           budget: 800000,
           type: "Terrace",
-          progress: 60,
+          progress: 'Scheduled',
           status: "negative",
-          updated_at: 1660367815
+          updated_at: 1660267815
         },
     ]
   },
   methods: {
-    goClientDetails(id:string) {
+    goClientDetail (id:string) {
       this.$router.push('/clients');
     },
-    getStatusColor(status:string) {
+    getStatusColor (status:string) {
       switch (status) {
         case 'positive':
-          return { gradient: ['#01cd55'] }
-          break;
+          return { gradient: ['#01cd55', '#00d4ff'] };
 
         case 'negative':
-          return { gradient: ['red'] }
-          break;
+          return { gradient: ['#c30404', '#611f1f'] };
 
         case 'neutral':
-          return { gradient: ['grey'] }
-          break;
+          return { gradient: ['#9d9d9d'] };
       }
+    },
+    getStatusProgress (progress:string) {
+      const progressToNumber: {[key: string]: number} = {
+        'WhatsApp': 20,
+        'Scheduled': 40,
+        'Appointment': 60,
+        'Booking': 80,
+        'Loan Application': 100
+      }
+
+      return progressToNumber[progress];
     }
   }
 });

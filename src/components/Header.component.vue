@@ -4,7 +4,6 @@
       <div class="logo" @click="() => $router.push('/')">streams</div>
       <nav class="w-5/6">
         <router-link to="/">Dashboard</router-link>
-        <router-link to="/engine">Engine</router-link>
         <router-link to="/clients">Clients</router-link>
         <router-link to="/market">Market</router-link>
       </nav>

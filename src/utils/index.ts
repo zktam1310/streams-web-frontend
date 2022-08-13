@@ -23,8 +23,31 @@ export class DateFormatter {
 
     distanceDay(timestamp:number) {
         let difference = Date.now() - (timestamp * 1000);
+        let d: any, h: any, m: any = undefined; 
+        let leftover: number = 0; 
+
         if (difference <= 0) return "Now";
-        if (difference < 86400) return Math.floor(difference / 3600) + " minute ago";
-        return Math.floor(difference / 86400) + " day ago";
+
+        if (difference >= 8.64e+7) {
+            d = Math.floor(difference/8.64e+7);
+            leftover = difference%8.64e+7;
+        } else leftover = difference;
+        
+        if (leftover >= 3.6e+6) {
+            h = Math.floor(leftover/3.6e+6);
+            leftover %= 3.6e+6;
+        } else leftover = leftover > 0 ? leftover : difference;
+        
+        m = Math.floor(leftover/60000);
+
+        if (d) {
+            if (h) return d + "d " + h + "hr ago";
+            else return d + "d ago";
+        } else {
+            if (h && m) return h + "hr " + m + "min ago";
+            else if (h) return h + "hr ago";
+            else return m + "min ago";
+        }
+        
     }
 }
