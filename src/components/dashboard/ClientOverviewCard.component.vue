@@ -6,40 +6,40 @@
           :key="k"
           @click="goClientDetails(v['id'])"
           class="client-wrapper">
-            <div>
-              {{ v['title'] + " " + v['name'] }}
-              <span
-                v-if="v['status'] == 'positive'"
-                class="ml-3 text-green-300">
-                <font-awesome-icon icon="fa fa-face-smile" />
-              </span>
-              <span
-                v-else-if="v['status'] == 'negative'"
-                class="ml-3 text-red-500">
-                <font-awesome-icon icon="fa fa-face-dizzy" />
-              </span>
-              <span
-                v-else
-                class="ml-3 text-gray-400">
-                <font-awesome-icon icon="fa fa-face-meh" />
-              </span>
+            <div class="w-3/5">
+              <div>
+                {{ v['title'] + " " + v['name'] }}
+              </div>
+              <div>
+                <font-awesome-icon icon="fa fa-sack-dollar" />
+                <span class="ml-2">{{ NumberFormatter.thousandSeparator(v['budget']) }}</span>
+              </div>
+              <div>
+                <font-awesome-icon icon="fa fa-house" />
+                <span class="ml-2">{{ v['type'] }}</span>
+              </div>
+              <div>
+                <font-awesome-icon icon="fa fa-calendar" />
+                <span class="ml-2">{{ DateFormatter.distanceDay(v['updated_at']) }}</span>
+              </div>
+              <div class="client_wrapper_hover_icon">
+                <span class="rotate-90 inline-block">
+                  <font-awesome-icon icon="fa fa-arrow-turn-down" />
+                </span>
+              </div>
             </div>
-            <div>
-              <font-awesome-icon icon="fa fa-sack-dollar" />
-              <span class="ml-2">{{ NumberFormatter.thousandSeparator(v['budget']) }}</span>
-            </div>
-            <div>
-              <font-awesome-icon icon="fa fa-house" />
-              <span class="ml-2">{{ v['type'] }}</span>
-            </div>
-            <div>
-              <font-awesome-icon icon="fa fa-calendar" />
-              <span class="ml-2">{{ DateFormatter.distanceDay(v['updated_at']) }}</span>
-            </div>
-            <div class="client_wrapper_hover_icon">
-              <span class="rotate-90 inline-block">
-                <font-awesome-icon icon="fa fa-arrow-turn-down" />
-              </span>
+            <div class="w-2/5">
+              <vue-circle
+                :progress="v['progress']"
+                :size="100"
+                :reverse="false"
+                line-cap="round"
+                :fill="getStatusColor(v['status'])"
+                empty-fill="rgba(0, 0, 0, .1)"
+                :animation-start-value="0.0"
+                :start-angle="0"
+                insert-mode="append"
+                :thickness="5"/>
             </div>
         </div>
     </div>
@@ -49,6 +49,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { NumberFormatter, DateFormatter } from '@/utils/index';
+import VueCircle from 'vue2-circle-progress';
 
 interface clientObject {
   id: string,
@@ -56,12 +57,16 @@ interface clientObject {
   title: string,
   budget: number,
   type: string,
+  progress: number,
   status: string,
   updated_at: number
 }
 
 export default Vue.extend({
   name: 'ClientOverviewCard',
+  components: {
+    VueCircle
+  },
   data() {
     return {
       clientData: [] as Array<clientObject>,
@@ -77,8 +82,9 @@ export default Vue.extend({
           title: "Ms.",
           budget: 900000,
           type: "Condo",
+          progress: 70,
           status: "neutral",
-          updated_at: 1659850538
+          updated_at: 1660368715
       },
         {
           id: "2",
@@ -86,8 +92,9 @@ export default Vue.extend({
           title: "Mr.",
           budget: 1200000,
           type: "Terrace",
+          progress: 30,
           status: "positive",
-          updated_at: 1659850138
+          updated_at: 1660368415
         },
         {
           id: "3",
@@ -95,14 +102,30 @@ export default Vue.extend({
           title: "Mr.",
           budget: 800000,
           type: "Terrace",
+          progress: 60,
           status: "negative",
-          updated_at: 1659849138
+          updated_at: 1660367815
         },
     ]
   },
   methods: {
     goClientDetails(id:string) {
       this.$router.push('/clients');
+    },
+    getStatusColor(status:string) {
+      switch (status) {
+        case 'positive':
+          return { gradient: ['#01cd55'] }
+          break;
+
+        case 'negative':
+          return { gradient: ['red'] }
+          break;
+
+        case 'neutral':
+          return { gradient: ['grey'] }
+          break;
+      }
     }
   }
 });
@@ -114,10 +137,10 @@ export default Vue.extend({
   box-shadow: 0px 0.10rem 0.5rem rgb(0 0 0 / 0.10);
 }
 .client-wrapper {
-  @apply w-1/2 lg:w-1/3 px-5 my-2 text-left cursor-pointer;
+  @apply w-full md:w-1/2 lg:w-1/3 px-5 my-2 text-left cursor-pointer flex flex-wrap;
 }
 .client_wrapper_hover_icon {
-  @apply opacity-10 text-center;
+  @apply opacity-10 text-right;
   transition: 0.2s all;
 }
 .client-wrapper:hover .client_wrapper_hover_icon {

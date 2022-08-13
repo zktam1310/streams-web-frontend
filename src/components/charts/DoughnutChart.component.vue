@@ -1,6 +1,6 @@
 <template>
     <div class="p-2">
-    <doughnut 
+    <doughnut
         chart-id="1"
         :width="width"
         :height="height"
@@ -47,10 +47,9 @@ export default Vue.extend({
         height: 500,
         width: 500,
     }
-    
+
   },
   mounted() {
-    console.log(this.chartData);
   }
 });
 </script>
