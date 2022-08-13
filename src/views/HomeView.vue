@@ -2,7 +2,8 @@
   <div class="home">
     <div class="home-row">
       <div class="home-row-child w-full lg:w-2/3">
-        <overview-card-component />
+        <overview-card-component
+          :username="username" />
       </div>
       <div class="home-row-child w-full lg:w-2/3">
         <div class="home-row-child-title">Clients</div>
@@ -33,6 +34,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      username: 'Streamer',
       chartWidth: 0
     }
   },

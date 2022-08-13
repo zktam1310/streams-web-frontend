@@ -13,9 +13,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'OverviewCard',
-  data() {
-    return {
-      username: "Guest",
+  props: {
+    username: {
+      type: String,
+      default: 'Streamer'
     }
   }
 });
