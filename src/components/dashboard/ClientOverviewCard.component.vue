@@ -18,9 +18,8 @@
                 <font-awesome-icon icon="fa fa-house" />
                 <span class="ml-2">{{ v['type'] }}</span>
               </div>
-              <div>
-                <font-awesome-icon icon="fa fa-calendar" />
-                <span class="ml-2">{{ DateFormatter.distanceDay(v['updated_at']) }}</span>
+              <div class="text-left">
+                <span class="text-xs italic ml-4">{{ DateFormatter.distanceDay(v['updated_at']) }}</span>
               </div>
               <div class="client_wrapper_hover_icon">
                 <span class="rotate-90 inline-block">

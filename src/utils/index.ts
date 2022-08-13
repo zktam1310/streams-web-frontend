@@ -41,12 +41,12 @@ export class DateFormatter {
         m = Math.floor(leftover/60000);
 
         if (d) {
-            if (h) return d + "d " + h + "hr ago";
-            else return d + "d ago";
+            if (h) return d + " day " + h + " hour ago";
+            else return d + " day ago";
         } else {
-            if (h && m) return h + "hr " + m + "min ago";
-            else if (h) return h + "hr ago";
-            else return m + "min ago";
+            if (h && m) return h + " hour " + m + " min ago";
+            else if (h) return h + " hour ago";
+            else return m + " min ago";
         }
         
     }
