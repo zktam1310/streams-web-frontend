@@ -39,7 +39,13 @@
                 :thickness="8"
                 :show-percent="false"
                 >
-                <div class="text-xs font-mono"> {{ v['progress'] }} </div>
+                <div class="text-xs font-semibold">
+                  <span 
+                    :class="v['status'] == 'negative' ? 'text-red-900' : 
+                    (v['status'] == 'positive' ? 'text-green-900' : 'text-gray-700')">
+                    {{ v['progress'] }}
+                  </span>
+                </div>
               </vue-circle>
             </div>
         </div>
@@ -89,7 +95,7 @@ export default Vue.extend({
       },
         {
           id: "2",
-          name: "Mike",
+          name: "Chan",
           title: "Mr.",
           budget: 1200000,
           type: "Terrace",
@@ -110,7 +116,7 @@ export default Vue.extend({
     ]
   },
   methods: {
-    goClientDetail (id:string) {
+    goClientDetails (id:string) {
       this.$router.push('/clients');
     },
     getStatusColor (status:string) {
@@ -127,11 +133,12 @@ export default Vue.extend({
     },
     getStatusProgress (progress:string) {
       const progressToNumber: {[key: string]: number} = {
-        'WhatsApp': 20,
-        'Scheduled': 40,
-        'Appointment': 60,
-        'Booking': 80,
-        'Loan Application': 100
+        'WhatsApp': 10,
+        'Scheduled': 30,
+        'Appointment': 50,
+        'Booking': 70,
+        'Loan Application': 90,
+        'Signed': 100
       }
 
       return progressToNumber[progress];

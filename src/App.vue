@@ -4,6 +4,7 @@
     <div class="max-w-wrapper">
       <router-view class="view_wrapper"/>
     </div>
+    <calculator-component-vue />
     <footer-component-vue />
   </div>
 </template>
@@ -12,12 +13,14 @@
 import Vue from 'vue';
 import HeaderComponentVue from './components/Header.component.vue';
 import FooterComponentVue from './components/Footer.component.vue';
+import CalculatorComponentVue from './components/Calculator.component.vue';
 
 export default Vue.extend({
   name: 'App',
   components: {
     HeaderComponentVue,
-    FooterComponentVue
+    FooterComponentVue,
+    CalculatorComponentVue
   },
   watch: {
       $route: {

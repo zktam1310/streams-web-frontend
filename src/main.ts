@@ -15,18 +15,21 @@ import
   faFaceDizzy,
   faFaceSmile,
   faArrowTurnDown,
-  faCalendar} from '@fortawesome/free-solid-svg-icons'
+  faCalculator} from '@fortawesome/free-solid-svg-icons'
+import VModal from 'vue-js-modal'
 
 /* add icons to the library */
-library.add(faUser, faPowerOff, faSackDollar, faHouse, faFaceMeh, faFaceDizzy, faFaceSmile, faArrowTurnDown, faCalendar)
+library.add(faUser, faPowerOff, faSackDollar, faHouse, faFaceMeh, faFaceDizzy, faFaceSmile, faArrowTurnDown, faCalculator);
 
 /* add font awesome icon component */
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-Vue.config.productionTip = false
+Vue.use(VModal);
+
+Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

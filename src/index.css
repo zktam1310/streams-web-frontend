@@ -6,7 +6,7 @@
 
 * {
     font-family: 'Overpass', sans-serif;
-    font-weight: 400;
+    pointer-events: auto;
 }
 
 .max-w-wrapper {
@@ -22,4 +22,13 @@
 
 .btn:hover {
     box-shadow: 0px 0.25rem 1rem rgb(0 0 0 / 0.20);
+}
+
+input {
+    @apply py-1 px-2 rounded-sm;
+    border: 1px solid rgb(196, 196, 196);
+}
+
+input:focus-visible {
+    outline: none;
 }
