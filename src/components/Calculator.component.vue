@@ -6,14 +6,14 @@
         <font-awesome-icon icon="fa-solid fa-calculator" />
       </div>
     </div>
-    <modal 
+    <modal
       name="calcModal"
       draggable=".calcHeader"
       :clickToClose="false"
       :height="calculatorHeight"
       classes="calcModalBox">
       <div class="calcHeader">Calculator <span class="font-mono font-normal text-sm">(DRAG ME)</span></div>
-      <button 
+      <button
         class="calcModalClose"
         @click="showCalculator(false)">
           ×
@@ -23,31 +23,31 @@
           <div class="calcModalInputRow">
             <label>Property Price (RM)</label>
             <input
-              v-model="propertyPrice"
+              v-model="calculatorData.propertyPrice"
               @keypress="onlyNumber"
               @paste="onlyNumberPaste"
-              @blur="calculate('propertyPrice', propertyPrice)" />
+              @blur="calculate($event, 'propertyPrice')" />
           </div>
           <div class="calcModalInputRow">
             <label>Downpayment Price (RM)</label>
             <input
-              v-model="downpaymentPrice"
+              v-model="calculatorData.downpaymentPrice"
               @keypress="onlyNumber"
-              @blur="calculate('downpaymentPrice', downpaymentPrice)" />
+              @blur="calculate($event, 'downpaymentPrice')" />
           </div>
           <div class="calcModalInputRow">
             <label>Loan Period (Years)</label>
             <input
-              v-model="loanPeriod"
+              v-model="calculatorData.loanPeriod"
               @keypress="onlyNumber"
-              @blur="calculate('loanPeriod', loanPeriod)" />
+              @blur="calculate($event, 'loanPeriod')" />
           </div>
           <div class="calcModalInputRow">
             <label>Interest Rate (%)</label>
             <input
-              v-model="interestRate"
+              v-model="calculatorData.interestRate"
               @keypress="onlyNumber"
-              @blur="calculate('interestRate', downpaymentPrice)" />
+              @blur="calculate($event, 'interestRate')" />
           </div>
         </div>
       </div>
@@ -63,32 +63,55 @@ export default Vue.extend({
   data() {
     return {
       calculatorHeight: 430,
-      propertyPrice: '',
-      downpaymentPrice: '',
-      loanPeriod: 30,
-      interestRate: 3,
+      calculatorData: {
+        propertyPrice: '' as any,
+        downpaymentPrice: '' as any,
+        loanPeriod: 30 as any,
+        interestRate: 3 as any,
+        totalLoan: '' as any,
+        monthlyPay: '' as any,
+        totalPay: '' as any,
+        totalInterest: '' as any
+      },
       keysAllowed: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     }
   },
   methods: {
     showCalculator (show: any = true) {
       if (show) this.$modal.show('calcModal');
-      else this.$modal.hide('calcModal'); 
+      else this.$modal.hide('calcModal');
     },
     onlyNumber(e: KeyboardEvent) {
       const keysAllowed = [...this.keysAllowed];
-      const keyPressed: string = e.key;    
-      console.log(keyPressed);
-      if (e.target?.value == '') delete keysAllowed[0]; 
-      if (!keysAllowed.includes(keyPressed)) e.preventDefault(); 
+      const keyPressed: string = e.key;
+      // disable `0` input for first number
+      // if (e.target?.value == '') delete keysAllowed[0];
+      if (!keysAllowed.includes(keyPressed)) e.preventDefault();
     },
     onlyNumberPaste(e: ClipboardEvent) {
       const keysAllowed = [...this.keysAllowed];
-      const keys = e.target?.value.split('');
+      const input = e.clipboardData.getData('text/plain');
+      const inputAry = input.split('');
+      if (!inputAry.every((n) => keysAllowed.includes(n))) e.preventDefault();
+
     },
-    calculate (field: string, value: any) {
-      console.log(field);
-      console.log(Number(value));
+    calculate (e: Event, field: string) {
+      const inputAry = e.target?.value.split('');
+      if (inputAry[0] == '0') {
+        delete inputAry[0];
+        this.calculatorData[field] = inputAry.join('');
+      }
+      if (
+        this.calculatorData.propertyPrice &&
+        this.calculatorData.downpaymentPrice &&
+        this.calculatorData.loanPeriod &&
+        this.calculatorData.interestRate
+      ) {
+        this.totalLoan = this.calculatorData.propertyPrice - this.calculatorData.downpaymentPrice;
+      }
+
+      console.log(this.totalLoan);
+
     }
   }
 });
@@ -98,7 +121,7 @@ export default Vue.extend({
 .calc-btn-wrapper {
   @apply absolute;
   bottom: 10px;
-  right: 30px;
+  right: 50px;
 }
 .calcBtn {
   @apply h-20 w-20 relative cursor-pointer bg-white;
