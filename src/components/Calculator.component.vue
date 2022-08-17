@@ -9,8 +9,11 @@
     <modal
       name="calcModal"
       draggable=".calcHeader"
+      :resizable="true"
+      :adaptive="true"
       :clickToClose="false"
       :height="calculatorHeight"
+      :width="calculatorWidth"
       classes="calcModalBox">
       <div class="calcHeader">Calculator <span class="font-mono font-normal text-sm">(DRAG ME)</span></div>
       <button
@@ -26,28 +29,31 @@
               v-model="calculatorData.propertyPrice"
               @keypress="onlyNumber"
               @paste="onlyNumberPaste"
-              @blur="calculate($event, 'propertyPrice')" />
+              @blur="handleInput($event, 'propertyPrice')" />
           </div>
           <div class="calcModalInputRow">
             <label>Downpayment Price (RM)</label>
             <input
               v-model="calculatorData.downpaymentPrice"
               @keypress="onlyNumber"
-              @blur="calculate($event, 'downpaymentPrice')" />
+              @paste="onlyNumberPaste"
+              @blur="handleInput($event, 'downpaymentPrice')" />
           </div>
           <div class="calcModalInputRow">
             <label>Loan Period (Years)</label>
             <input
               v-model="calculatorData.loanPeriod"
               @keypress="onlyNumber"
-              @blur="calculate($event, 'loanPeriod')" />
+              @paste="onlyNumberPaste"
+              @blur="handleInput($event, 'loanPeriod')" />
           </div>
           <div class="calcModalInputRow">
             <label>Interest Rate (%)</label>
             <input
               v-model="calculatorData.interestRate"
               @keypress="onlyNumber"
-              @blur="calculate($event, 'interestRate')" />
+              @paste="onlyNumberPaste"
+              @blur="handleInput($event, 'interestRate')" />
           </div>
         </div>
       </div>
@@ -63,18 +69,24 @@ export default Vue.extend({
   data() {
     return {
       calculatorHeight: 430,
+      calculatorWidth: 500,
       calculatorData: {
         propertyPrice: '' as any,
         downpaymentPrice: '' as any,
         loanPeriod: 30 as any,
         interestRate: 3 as any,
-        totalLoan: '' as any,
+        totalPrinciple: '' as any,
         monthlyPay: '' as any,
         totalPay: '' as any,
-        totalInterest: '' as any
+        totalInterest: '' as any,
+        payDetails: [] as number[][]
       },
       keysAllowed: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     }
+  },
+  created() {
+  },
+  destroyed() {
   },
   methods: {
     showCalculator (show: any = true) {
@@ -95,23 +107,49 @@ export default Vue.extend({
       if (!inputAry.every((n) => keysAllowed.includes(n))) e.preventDefault();
 
     },
-    calculate (e: Event, field: string) {
+    handleInput (e: Event, field: string) {
+      // check if invalid input with `0` as first number
       const inputAry = e.target?.value.split('');
-      if (inputAry[0] == '0') {
+      if (inputAry.length > 1 && inputAry[0] == '0') {
         delete inputAry[0];
         this.calculatorData[field] = inputAry.join('');
       }
+      this.calculate();
+    },
+    calculate() {
+      // proceed only if all four values present
       if (
-        this.calculatorData.propertyPrice &&
-        this.calculatorData.downpaymentPrice &&
-        this.calculatorData.loanPeriod &&
-        this.calculatorData.interestRate
-      ) {
-        this.totalLoan = this.calculatorData.propertyPrice - this.calculatorData.downpaymentPrice;
+        !this.calculatorData.propertyPrice ||
+        !this.calculatorData.downpaymentPrice ||
+        !this.calculatorData.loanPeriod ||
+        !this.calculatorData.interestRate
+      ) return;
+
+      // proceed only if propertyPrice > downpaymentPrice
+      this.calculatorData.totalPrinciple = this.calculatorData.propertyPrice - this.calculatorData.downpaymentPrice;
+      if (this.calculatorData.totalPrinciple <= 0) {
+        this.calculatorData.propertyPrice = '';
+        this.calculatorData.downpaymentPrice = '';
+        this.calculatorData.totalPrinciple = '';
+        return;
       }
 
-      console.log(this.totalLoan);
+      // let remainingPrinciple = this.calculatorData.totalLoan;
 
+      // for (let i = 0; i < this.calculatorData.loanPeriod; i ++) {
+      //   let thisMonth = [
+      //     i+1,
+
+      //   ]
+      // }
+
+      let monthlyInterestRate = this.calculatorData.interestRate / 100 * 12;
+      let loanPeriodInMonth = this.calculatorData.loanPeriod * 12;
+      
+      let totalPay = ( this.calculatorData.totalPrinciple * monthlyInterestRate * Math.pow(1+monthlyInterestRate, loanPeriodInMonth) ) /
+      ( Math.pow(1+monthlyInterestRate, loanPeriodInMonth) - 1 );
+
+      console.log(totalPay);
     }
   }
 });
