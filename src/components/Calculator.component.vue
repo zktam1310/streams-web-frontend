@@ -16,7 +16,7 @@
       <button 
         class="calcModalClose"
         @click="showCalculator(false)">
-          ╳
+          ×
       </button>
       <div class="calcModalBody">
         <div class="calcModalBodyWrapper">
@@ -24,25 +24,30 @@
             <label>Property Price (RM)</label>
             <input
               v-model="propertyPrice"
-              @blur="calculate" />
+              @keypress="onlyNumber"
+              @paste="onlyNumberPaste"
+              @blur="calculate('propertyPrice', propertyPrice)" />
           </div>
           <div class="calcModalInputRow">
             <label>Downpayment Price (RM)</label>
             <input
               v-model="downpaymentPrice"
-              @blur="calculate" />
+              @keypress="onlyNumber"
+              @blur="calculate('downpaymentPrice', downpaymentPrice)" />
           </div>
           <div class="calcModalInputRow">
             <label>Loan Period (Years)</label>
             <input
               v-model="loanPeriod"
-              @blur="calculate" />
+              @keypress="onlyNumber"
+              @blur="calculate('loanPeriod', loanPeriod)" />
           </div>
           <div class="calcModalInputRow">
             <label>Interest Rate (%)</label>
             <input
               v-model="interestRate"
-              @blur="calculate" />
+              @keypress="onlyNumber"
+              @blur="calculate('interestRate', downpaymentPrice)" />
           </div>
         </div>
       </div>
@@ -58,10 +63,11 @@ export default Vue.extend({
   data() {
     return {
       calculatorHeight: 430,
-      propertyPrice: 0,
-      downpaymentPrice: 0,
+      propertyPrice: '',
+      downpaymentPrice: '',
       loanPeriod: 30,
-      interestRate: 3
+      interestRate: 3,
+      keysAllowed: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     }
   },
   methods: {
@@ -69,8 +75,20 @@ export default Vue.extend({
       if (show) this.$modal.show('calcModal');
       else this.$modal.hide('calcModal'); 
     },
-    calculate (e: Event) {
-      console.log(e);
+    onlyNumber(e: KeyboardEvent) {
+      const keysAllowed = [...this.keysAllowed];
+      const keyPressed: string = e.key;    
+      console.log(keyPressed);
+      if (e.target?.value == '') delete keysAllowed[0]; 
+      if (!keysAllowed.includes(keyPressed)) e.preventDefault(); 
+    },
+    onlyNumberPaste(e: ClipboardEvent) {
+      const keysAllowed = [...this.keysAllowed];
+      const keys = e.target?.value.split('');
+    },
+    calculate (field: string, value: any) {
+      console.log(field);
+      console.log(Number(value));
     }
   }
 });
@@ -108,9 +126,14 @@ export default Vue.extend({
   @apply p-1 cursor-grab active:cursor-grabbing bg-gray-200 font-semibold;
 }
 .calcModalClose {
-  @apply absolute text-black font-semibold text-xs;
-  top: 8px;
+  @apply absolute text-black font-semibold text-2xl;
+  top: 2px;
   right: 10px;
+  transition: .1s all;
+}
+.calcModalClose:hover {
+  @apply text-white;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
 }
 .calcModalBody {
   @apply flex flex-wrap items-center p-3;

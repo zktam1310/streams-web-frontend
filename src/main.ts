@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './index.css'
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -17,6 +16,9 @@ import
   faArrowTurnDown,
   faCalculator} from '@fortawesome/free-solid-svg-icons'
 import VModal from 'vue-js-modal'
+
+import './index.css'
+import './styles/form.css'
 
 /* add icons to the library */
 library.add(faUser, faPowerOff, faSackDollar, faHouse, faFaceMeh, faFaceDizzy, faFaceSmile, faArrowTurnDown, faCalculator);
