@@ -22,11 +22,11 @@
           ×
       </button>
       <div class="calcModalBody">
-        <div class="calcModalBodyWrapper">
+        <div class="calcModalInputWrapper">
           <div class="calcModalInputRow">
             <label>Property Price (RM)</label>
             <input
-              v-model="calculatorData.propertyPrice"
+              v-model="calcData.propertyPrice"
               @keypress="onlyNumber"
               @paste="onlyNumberPaste"
               @blur="handleInput($event, 'propertyPrice')" />
@@ -34,7 +34,7 @@
           <div class="calcModalInputRow">
             <label>Downpayment Price (RM)</label>
             <input
-              v-model="calculatorData.downpaymentPrice"
+              v-model="calcData.downpaymentPrice"
               @keypress="onlyNumber"
               @paste="onlyNumberPaste"
               @blur="handleInput($event, 'downpaymentPrice')" />
@@ -42,7 +42,7 @@
           <div class="calcModalInputRow">
             <label>Loan Period (Years)</label>
             <input
-              v-model="calculatorData.loanPeriod"
+              v-model="calcData.loanPeriod"
               @keypress="onlyNumber"
               @paste="onlyNumberPaste"
               @blur="handleInput($event, 'loanPeriod')" />
@@ -50,10 +50,21 @@
           <div class="calcModalInputRow">
             <label>Interest Rate (%)</label>
             <input
-              v-model="calculatorData.interestRate"
+              v-model="calcData.interestRate"
               @keypress="onlyNumber"
               @paste="onlyNumberPaste"
               @blur="handleInput($event, 'interestRate')" />
+          </div>
+        </div>
+        <div class="calcModalResultWrapper">
+          <div>
+            Total Repayment (RM): {{ calcData.totalPay }}
+          </div>
+          <div>
+            Total Interest (RM): {{ calcData.totalInterest }}
+          </div>
+          <div>
+            Monthly Repayment (RM): {{ calcData.monthlyPay }}
           </div>
         </div>
       </div>
@@ -70,7 +81,7 @@ export default Vue.extend({
     return {
       calculatorHeight: 430,
       calculatorWidth: 500,
-      calculatorData: {
+      calcData: {
         propertyPrice: '' as any,
         downpaymentPrice: '' as any,
         loanPeriod: 30 as any,
@@ -112,44 +123,47 @@ export default Vue.extend({
       const inputAry = e.target?.value.split('');
       if (inputAry.length > 1 && inputAry[0] == '0') {
         delete inputAry[0];
-        this.calculatorData[field] = inputAry.join('');
+        this.calcData[field] = inputAry.join('');
       }
       this.calculate();
     },
     calculate() {
       // proceed only if all four values present
       if (
-        !this.calculatorData.propertyPrice ||
-        !this.calculatorData.downpaymentPrice ||
-        !this.calculatorData.loanPeriod ||
-        !this.calculatorData.interestRate
+        !this.calcData.propertyPrice ||
+        !this.calcData.downpaymentPrice ||
+        !this.calcData.loanPeriod ||
+        !this.calcData.interestRate
       ) return;
 
       // proceed only if propertyPrice > downpaymentPrice
-      this.calculatorData.totalPrinciple = this.calculatorData.propertyPrice - this.calculatorData.downpaymentPrice;
-      if (this.calculatorData.totalPrinciple <= 0) {
-        this.calculatorData.propertyPrice = '';
-        this.calculatorData.downpaymentPrice = '';
-        this.calculatorData.totalPrinciple = '';
+      this.calcData.totalPrinciple = this.calcData.propertyPrice - this.calcData.downpaymentPrice;
+      if (this.calcData.totalPrinciple <= 0) {
+        this.calcData.propertyPrice = '';
+        this.calcData.downpaymentPrice = '';
+        this.calcData.totalPrinciple = '';
         return;
       }
 
-      // let remainingPrinciple = this.calculatorData.totalLoan;
+      // let remainingPrinciple = this.calcData.totalLoan;
 
-      // for (let i = 0; i < this.calculatorData.loanPeriod; i ++) {
+      // for (let i = 0; i < this.calcData.loanPeriod; i ++) {
       //   let thisMonth = [
       //     i+1,
 
       //   ]
       // }
 
-      let monthlyInterestRate = this.calculatorData.interestRate / 100 * 12;
-      let loanPeriodInMonth = this.calculatorData.loanPeriod * 12;
+      let monthlyInterestRate = this.calcData.interestRate / 100 / 12;
+      let loanPeriodInMonth = this.calcData.loanPeriod * 12;
       
-      let totalPay = ( this.calculatorData.totalPrinciple * monthlyInterestRate * Math.pow(1+monthlyInterestRate, loanPeriodInMonth) ) /
+      this.calcData.monthlyPay = ( this.calcData.totalPrinciple * monthlyInterestRate * Math.pow(1+monthlyInterestRate, loanPeriodInMonth) ) /
       ( Math.pow(1+monthlyInterestRate, loanPeriodInMonth) - 1 );
 
-      console.log(totalPay);
+      this.calcData.totalPay = this.calcData.monthlyPay * loanPeriodInMonth;
+
+      this.calcData.totalInterest = this.calcData.totalPay - this.calcData.totalPrinciple;
+
     }
   }
 });
@@ -199,7 +213,7 @@ export default Vue.extend({
 .calcModalBody {
   @apply flex flex-wrap items-center p-3;
 }
-.calcModalBodyWrapper {
+.calcModalInputWrapper {
   @apply flex flex-wrap justify-center items-center w-1/2 px-3;
 }
 .calcModalInputRow {
@@ -213,5 +227,8 @@ export default Vue.extend({
 }
 .vm--overlay {
   display: none;
+}
+.calcModalResultWrapper {
+  @apply flex flex-wrap justify-center items-center w-1/2 px-3;
 }
 </style>
