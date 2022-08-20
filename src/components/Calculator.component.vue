@@ -24,7 +24,7 @@
       <div class="calcModalBody">
         <div class="calcModalInputWrapper">
           <div class="calcModalInputRow">
-            <label>Property Price (RM)</label>
+            <label>Property Price</label>
             <input
               v-model="calcData.propertyPrice"
               @keypress="onlyNumber"
@@ -32,7 +32,7 @@
               @blur="handleInput($event, 'propertyPrice')" />
           </div>
           <div class="calcModalInputRow">
-            <label>Downpayment Price (RM)</label>
+            <label>Downpayment Price</label>
             <input
               v-model="calcData.downpaymentPrice"
               @keypress="onlyNumber"
@@ -57,14 +57,21 @@
           </div>
         </div>
         <div class="calcModalResultWrapper">
-          <div>
-            Total Repayment (RM): {{ calcData.totalPay }}
+          <div class="calcModalResultRow">
+            <div>Total Principle:</div>
+            <div>{{ Numfmt.thousandSeparator(Numfmt.decimalFormatter(calcData.totalPrinciple)) }}</div>
           </div>
-          <div>
-            Total Interest (RM): {{ calcData.totalInterest }}
+          <div class="calcModalResultRow">
+            <div>Total Repayment:</div>
+            <div>{{ Numfmt.thousandSeparator(Numfmt.decimalFormatter(calcData.totalPay)) }}</div>
           </div>
-          <div>
-            Monthly Repayment (RM): {{ calcData.monthlyPay }}
+          <div class="calcModalResultRow">
+            <div>Total Interest:</div>
+            <div>{{ Numfmt.thousandSeparator(Numfmt.decimalFormatter(calcData.totalInterest)) }}</div>
+          </div>
+          <div class="calcModalResultRow">
+            <div>Monthly Repayment:</div>
+            <div>{{ Numfmt.thousandSeparator(Numfmt.decimalFormatter(calcData.monthlyPay)) }}</div>
           </div>
         </div>
       </div>
@@ -73,13 +80,15 @@
 </template>
 
 <script lang="ts">
+import { NumberFormatter } from '@/utils';
 import Vue from 'vue';
 
 export default Vue.extend({
   name: 'Calculator',
   data() {
     return {
-      calculatorHeight: 430,
+      Numfmt: new NumberFormatter();
+      calculatorHeight: 400,
       calculatorWidth: 500,
       calcData: {
         propertyPrice: '' as any,
@@ -116,7 +125,6 @@ export default Vue.extend({
       const input = e.clipboardData.getData('text/plain');
       const inputAry = input.split('');
       if (!inputAry.every((n) => keysAllowed.includes(n))) e.preventDefault();
-
     },
     handleInput (e: Event, field: string) {
       // check if invalid input with `0` as first number
@@ -145,24 +153,17 @@ export default Vue.extend({
         return;
       }
 
-      // let remainingPrinciple = this.calcData.totalLoan;
-
-      // for (let i = 0; i < this.calcData.loanPeriod; i ++) {
-      //   let thisMonth = [
-      //     i+1,
-
-      //   ]
-      // }
+      // TODO add monthly repayment details calculation
 
       let monthlyInterestRate = this.calcData.interestRate / 100 / 12;
       let loanPeriodInMonth = this.calcData.loanPeriod * 12;
-      
+
       this.calcData.monthlyPay = ( this.calcData.totalPrinciple * monthlyInterestRate * Math.pow(1+monthlyInterestRate, loanPeriodInMonth) ) /
       ( Math.pow(1+monthlyInterestRate, loanPeriodInMonth) - 1 );
 
-      this.calcData.totalPay = this.calcData.monthlyPay * loanPeriodInMonth;
+      this.calcData.totalPay = (this.calcData.monthlyPay * loanPeriodInMonth);
 
-      this.calcData.totalInterest = this.calcData.totalPay - this.calcData.totalPrinciple;
+      this.calcData.totalInterest = (this.calcData.totalPay - this.calcData.totalPrinciple);
 
     }
   }
@@ -211,7 +212,7 @@ export default Vue.extend({
   text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
 }
 .calcModalBody {
-  @apply flex flex-wrap items-center p-3;
+  @apply flex flex-wrap items-start p-3;
 }
 .calcModalInputWrapper {
   @apply flex flex-wrap justify-center items-center w-1/2 px-3;
@@ -230,5 +231,21 @@ export default Vue.extend({
 }
 .calcModalResultWrapper {
   @apply flex flex-wrap justify-center items-center w-1/2 px-3;
+}
+
+.calcModalResultRow {
+  @apply w-full my-3;
+}
+
+.calcModalResultRow:first-child {
+  @apply mt-2;
+}
+
+.calcModalResultRow div {
+  @apply w-full;
+}
+
+.calcModalResultRow div:last-child {
+  @apply h-7 py-1 bg-gray-50 font-bold;
 }
 </style>
