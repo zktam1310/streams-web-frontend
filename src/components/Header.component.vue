@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-wrapper">
     <div class="header">
-      <div class="logo" @click="() => $router.push('/')">streams</div>
+      <div class="logo" @click="goDashboard">streams</div>
       <nav class="w-5/6">
         <router-link to="/">Dashboard</router-link>
         <router-link to="/clients">Clients</router-link>
@@ -34,6 +34,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    goDashboard() {
+      if (this.$route.fullPath !== '/') this.$router.push('/');
+    }
   }
 });
 </script>
