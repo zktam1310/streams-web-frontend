@@ -87,7 +87,7 @@ export default Vue.extend({
   name: 'Calculator',
   data() {
     return {
-      Numfmt: new NumberFormatter();
+      Numfmt: new NumberFormatter(),
       calculatorHeight: 400,
       calculatorWidth: 500,
       calcData: {
