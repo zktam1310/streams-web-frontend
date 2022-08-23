@@ -7,15 +7,16 @@
         <router-link to="/clients">Clients</router-link>
         <router-link to="/market">Market</router-link>
       </nav>
-      <div>
+      <div class="flex flex-wrap">
+        <calculator-component-vue />
         <div
           v-if="isLoggedIn" 
-          class="profileBtn" @click="() => $router.push('/profile')">
+          class="floatBtn" @click="() => $router.push('/profile')">
           <font-awesome-icon icon="fa-solid fa-user" />
         </div>
         <div
           v-else 
-          class="profileBtn" @click="() => $router.push('/login')">
+          class="floatBtn" @click="() => $router.push('/login')">
           <font-awesome-icon icon="fa-solid fa-power-off" />
         </div>
       </div>
@@ -25,9 +26,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import CalculatorComponentVue from './Calculator.component.vue';
 
 export default Vue.extend({
   name: 'Header',
+  components: {
+    CalculatorComponentVue
+  },
   data() {
     return {
       isLoggedIn: true
@@ -41,7 +46,7 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
+<style>
 .header {
   @apply mt-1 flex flex-wrap justify-center items-center p-5;
 }
@@ -64,22 +69,28 @@ nav a.router-link-exact-active {
   @apply mr-auto font-semibold text-2xl text-white cursor-pointer select-none;
   text-shadow: 0 1px 6px rgba(0,0,0,0.5);
 }
-.profileBtn {
-  @apply h-10 w-10 relative cursor-pointer;
+.floatBtn {
+  @apply h-10 w-10 ml-3 relative cursor-pointer bg-white;
   border-radius: 50px;
   box-shadow: 0px 0.25rem 1rem rgb(0 0 0 / 0.10);
   transition: all .25s;
 }
 
-.profileBtn svg {
+.floatBtn svg {
   @apply absolute;
   left: 50%;
   top: 30%;
   transform: translateX(-50%);
 }
 
-.profileBtn:hover {
+.floatBtn:hover {
   box-shadow: 0px 0.25rem 1rem rgb(0 0 0 / 0.20);
   transform: scale(1.1);
 }
+
+.floatBtn:active {
+  box-shadow: 0px 0.25rem 1rem rgb(0 0 0 / 0.20);
+  transform: scale(0.9);
+}
+
 </style>
