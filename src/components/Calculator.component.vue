@@ -1,11 +1,9 @@
 <template>
-  <div class="max-w-wrapper relative">
-    <div class="calc-btn-wrapper">
+  <div>
       <div
-        class="calcBtn" @click="showCalculator">
+        class="floatBtn" @click="showCalculator">
         <font-awesome-icon icon="fa-solid fa-calculator" />
       </div>
-    </div>
     <modal
       name="calcModal"
       draggable=".calcHeader"
@@ -51,8 +49,8 @@
             <label>Interest Rate (%)</label>
             <input
               v-model="calcData.interestRate"
-              @keypress="onlyNumber"
-              @paste="onlyNumberPaste"
+              @keypress="onlyNumber($event, true)"
+              @paste="onlyNumberPaste($event, true)"
               @blur="handleInput($event, 'interestRate')" />
           </div>
         </div>
@@ -113,17 +111,23 @@ export default Vue.extend({
       if (show) this.$modal.show('calcModal');
       else this.$modal.hide('calcModal');
     },
-    onlyNumber(e: KeyboardEvent) {
+    onlyNumber(e: KeyboardEvent, hasDecimal: Boolean = false) {
       const keysAllowed = [...this.keysAllowed];
       const keyPressed: string = e.key;
-      // disable `0` input for first number
-      // if (e.target?.value == '') delete keysAllowed[0];
+      // handler for decimal input
+      if (hasDecimal) keysAllowed.push('.');
+      if ((e.target.value.includes('.') || e.target.value == '' )&& keyPressed == '.') e.preventDefault();
+      
       if (!keysAllowed.includes(keyPressed)) e.preventDefault();
     },
-    onlyNumberPaste(e: ClipboardEvent) {
+    onlyNumberPaste(e: ClipboardEvent, hasDecimal: Boolean = false) {
       const keysAllowed = [...this.keysAllowed];
       const input = e.clipboardData.getData('text/plain');
       const inputAry = input.split('');
+      // handler for decimal input
+      if (hasDecimal) keysAllowed.push('.');
+      if (inputAry[0] == '.') e.preventDefault();
+
       if (!inputAry.every((n) => keysAllowed.includes(n))) e.preventDefault();
     },
     handleInput (e: Event, field: string) {
@@ -171,30 +175,6 @@ export default Vue.extend({
 </script>
 
 <style>
-.calc-btn-wrapper {
-  @apply absolute;
-  bottom: 10px;
-  right: 50px;
-}
-.calcBtn {
-  @apply h-20 w-20 relative cursor-pointer bg-white;
-  border-radius: 50px;
-  box-shadow: 0px 0.25rem 1rem rgb(0 0 0 / 0.10);
-  transition: all .25s;
-}
-.calcBtn svg {
-  @apply absolute text-4xl;
-  left: 50%;
-  top: 27%;
-  transform: translateX(-50%);
-}
-.calcBtn:hover {
-  box-shadow: 0px 0.25rem 1rem rgb(0 0 0 / 0.20);
-  transform: scale(1.1);
-}
-.calcBtn:active {
-  transform: scale(0.85);
-}
 .calcModalBox {
   @apply rounded-md !important;
 }
