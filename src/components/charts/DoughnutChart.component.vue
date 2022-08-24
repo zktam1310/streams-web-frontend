@@ -25,11 +25,6 @@ import {
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 
-interface IChartData {
-  labels: Array<String>,
-  datasets: Array<Object>
-}
-
 export default Vue.extend({
   name: 'BarChart',
   components: {
@@ -37,17 +32,9 @@ export default Vue.extend({
   },
   props: {
     chartData: Object,
-  },
-  data() {
-    return {
-        chartOptions: {
-            responsive: true,
-            maintainAspectRatio: false
-        },
-        height: 500,
-        width: 500,
-    }
-
+    chartOptions: Object,
+    height: Number,
+    width: Number
   },
   mounted() {
   }

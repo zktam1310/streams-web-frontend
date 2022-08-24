@@ -2,10 +2,18 @@
   <div class="card-wrapper">
     <div class="flex flex-wrap justify-center">
       <div class="my-2 md:my-0">
-        <doughnut-chart-component :chartData="chartData" />
+        <doughnut-chart-component
+        :chartData="chartData"
+        :chartOptions="chartOptions"
+        :height="400"
+        :width="400" />
       </div>
       <div class="my-2 md:my-0">
-        <doughnut-chart-component :chartData="chartData2" />
+        <doughnut-chart-component
+        :chartData="chartData2"
+        :chartOptions="chartOptions"
+        :height="400"
+        :width="400" />
       </div>
     </div>
   </div>
@@ -35,31 +43,39 @@ export default Vue.extend({
   mounted() {
     this.chartData = {
       labels: ['Residential', 'Commercial', 'Industrial'],
-      datasets: [{ 
-        data: [40, 20, 12], 
+      datasets: [{
+        data: [40, 20, 12],
         backgroundColor: [
           'rgb(255, 0, 0)',
           'rgb(54, 162, 235)',
           'rgb(255, 205, 86)'
-        ],  
+        ],
       }]
     };
     this.chartData2 = {
       labels: ['Ampang', 'Klang', 'Bukit Jalil', 'Sentul'],
-      datasets: [{ 
-        data: [35, 12, 10, 8], 
+      datasets: [{
+        data: [35, 12, 10, 8],
         backgroundColor: [
           'rgb(255, 0, 0)',
           'rgb(54, 162, 235)',
           'rgb(255, 205, 86)',
           'rgb(255, 99, 132)',
-        ],  
+        ],
       }]
     };
   },
   methods: {
     goClientDetails(id:string) {
       this.$router.push('/clients');
+    }
+  },
+  computed: {
+    chartOptions() {
+      return {
+        responsive: true,
+        maintainAspectRatio: false
+      }
     }
   }
 });
