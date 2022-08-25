@@ -29,11 +29,11 @@
             </div>
             <div class="w-2/5">
               <vue-circle
-                :progress="getStatusProgress(v['progress'])"
+                :progress="getStatusProgress(v['status'][0]['title'])"
                 :size="100"
                 :reverse="false"
                 line-cap="round"
-                :fill="getStatusColor(v['status'])"
+                :fill="getStatusColor(v['status'][0]['result'])"
                 empty-fill="rgba(0, 0, 0, .1)"
                 insert-mode="append"
                 :thickness="8"
@@ -41,9 +41,9 @@
                 >
                 <div class="text-xs font-semibold">
                   <span 
-                    :class="v['status'] == 'negative' ? 'text-red-900' : 
-                    (v['status'] == 'positive' ? 'text-green-900' : 'text-gray-700')">
-                    {{ v['progress'] }}
+                    :class="v['status'][0]['result'] == 'negative' ? 'text-red-900' : 
+                    (v['status'][0]['result'] == 'positive' ? 'text-green-900' : 'text-gray-700')">
+                    {{ v['status'][0]['title'] }}
                   </span>
                 </div>
               </vue-circle>
@@ -57,17 +57,7 @@
 import Vue from 'vue';
 import { NumberFormatter, DateFormatter } from '@/utils/index';
 import VueCircle from 'vue2-circle-progress';
-
-interface clientObject {
-  id: string,
-  name: string,
-  title: string,
-  budget: number,
-  type: string,
-  progress: string,
-  status: string,
-  updated_at: number
-}
+import { IClient } from '@/interfaces/index';
 
 export default Vue.extend({
   name: 'ClientOverviewCard',
@@ -76,44 +66,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      clientData: [] as Array<clientObject>,
+      clientData: [] as Array<IClient>,
       NumberFormatter: new NumberFormatter(),
       DateFormatter: new DateFormatter(),
     }
   },
   mounted() {
-    this.clientData = [
-        {
-          id: "1",
-          name: "Cherry",
-          title: "Ms.",
-          budget: 900000,
-          type: "Condo",
-          progress: 'Appointment',
-          status: "neutral",
-          updated_at: 1660368715
-      },
-        {
-          id: "2",
-          name: "Chan",
-          title: "Mr.",
-          budget: 1200000,
-          type: "Terrace",
-          progress: 'Booking',
-          status: "positive",
-          updated_at: 1660290415
-        },
-        {
-          id: "3",
-          name: "Jack",
-          title: "Mr.",
-          budget: 800000,
-          type: "Terrace",
-          progress: 'Scheduled',
-          status: "negative",
-          updated_at: 1660267815
-        },
-    ]
+    this.clientData = this.$store.state.client;
   },
   methods: {
     goClientDetails (id:string) {
