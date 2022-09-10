@@ -34,17 +34,14 @@ export default Vue.extend({
   },
   data() {
     return {
-      username: 'Streamer',
+      username: '',
       chartWidth: 0
     }
   },
   created() {
-    this.onResize;
+    this.username = this.$store.state.user.name;
   },
   methods: {
-    onResize() {
-
-    }
   }
 });
 </script>
