@@ -10,7 +10,7 @@ let userData: IUser = {
   email: 'streamer@email.com',
 }
 
-let clientData: IClient[] =  [
+let clientsData: IClient[] =  [
   {
     id: "1",
     name: "Cherry",
@@ -61,9 +61,15 @@ let clientData: IClient[] =  [
 export default new Vuex.Store({
   state: {
     user: userData,
-    client: clientData
+    clients: clientsData
   },
   getters: {
+    getUserInfo(state) {
+      return state.user;
+    },
+    getClients(state) {
+      return state.clients;
+    }
   },
   mutations: {
   },

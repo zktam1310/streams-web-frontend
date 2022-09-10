@@ -2,7 +2,7 @@
   <div class="card-wrapper">
     <div class="flex flex-wrap">
         <div
-          v-for="(v,k) in clientData"
+          v-for="(v,k) in clientsData"
           :key="k"
           @click="goClientDetails(v['id'])"
           class="client-wrapper">
@@ -40,8 +40,8 @@
                 :show-percent="false"
                 >
                 <div class="text-xs font-semibold">
-                  <span 
-                    :class="v['status'][0]['result'] == 'negative' ? 'text-red-900' : 
+                  <span
+                    :class="v['status'][0]['result'] == 'negative' ? 'text-red-900' :
                     (v['status'][0]['result'] == 'positive' ? 'text-green-900' : 'text-gray-700')">
                     {{ v['status'][0]['title'] }}
                   </span>
@@ -57,7 +57,6 @@
 import Vue from 'vue';
 import { NumberFormatter, DateFormatter } from '@/utils/index';
 import VueCircle from 'vue2-circle-progress';
-import { IClient } from '@/interfaces/index';
 
 export default Vue.extend({
   name: 'ClientOverviewCard',
@@ -66,17 +65,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      clientData: [] as Array<IClient>,
       NumberFormatter: new NumberFormatter(),
       DateFormatter: new DateFormatter(),
     }
   },
-  mounted() {
-    this.clientData = this.$store.state.client;
-  },
   methods: {
     goClientDetails (id:string) {
-      this.$router.push('/clients');
+      this.$router.push(`/clients/${id}`);
     },
     getStatusColor (status:string) {
       switch (status) {
@@ -101,6 +96,11 @@ export default Vue.extend({
       }
 
       return progressToNumber[progress];
+    }
+  },
+  computed: {
+    clientsData() {
+      return this.$store.getters.getClients;
     }
   }
 });
