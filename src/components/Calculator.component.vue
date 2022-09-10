@@ -91,8 +91,8 @@ export default Vue.extend({
       calcData: {
         propertyPrice: '' as any,
         downpaymentPrice: '' as any,
-        loanPeriod: 30 as any,
-        interestRate: 3 as any,
+        loanPeriod: 35 as any,
+        interestRate: 3.5 as any,
         totalPrinciple: '' as any,
         monthlyPay: '' as any,
         totalPay: '' as any,
